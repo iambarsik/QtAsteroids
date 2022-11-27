@@ -8,6 +8,18 @@ struct mySettings   {
     bool bEnglish;
 };
 
+struct fPoint   {
+public:
+    fPoint(float x, float y)    {
+        X = x;
+        Y = y;
+    }
+    float x() { return X; }
+    float y() { return Y; }
+private:
+    float X, Y;
+};
+
 class myObject    {
 public:
     myObject() {
@@ -38,8 +50,10 @@ public:
     void Update()   {
         X += Vx;
         Y += Vy;
-        if(X < 0 || X + Width  > maxX) Vx = -Vx;
-        if(Y < 0 || Y + Height > maxY) Vy = -Vy;
+        if(X < 0) X += maxX;
+        if(Y < 0) Y += maxY;
+        if(X + Width  > maxX) X -= maxX;
+        if(Y + Height > maxY) Y -= maxY;
     }
     void Draw(QPainter *pnt)    {
         if(EnableImage) {
@@ -49,6 +63,8 @@ public:
             pnt->drawRect(X,Y,Width,Height);
         }
     }
+    float x()   { return X;}
+    float y()   { return Y;}
 private:
     float X, Y, maxX, maxY, Width, Height , Vx, Vy;
     bool EnableImage;
@@ -96,6 +112,87 @@ public:
             }
             pnt->drawEllipse(Geometry.x(),Geometry.y(),Geometry.width(),Geometry.height());
         }
+    }
+};
+
+enum MenuActions    {
+    None,
+    StartGame,
+    Exit
+};
+
+class myMenu    {
+public:
+    struct Punkt    {
+        QString NameEng, NameRus;
+        MenuActions Action;
+        Punkt(QString name_eng, QString name_rus, MenuActions action) {
+            NameEng = name_eng;
+            NameRus = name_rus;
+            Action = action;
+        }
+    };
+
+    bool bEnglish;
+
+    int Position;
+    QVector<Punkt> Options;
+
+    myMenu()    {
+        Position = 0;
+    }
+    void Init(QVector<Punkt> Menu, bool english)  {
+        Options.clear();
+        Options = Menu;
+        bEnglish = english;
+    }
+    void SetLanguage(bool english) { bEnglish = english; }
+    QString getPositionName(int pos)    {
+        if(Options.size() > 0)  {
+            if(pos == Position) {
+                if(bEnglish) return QString(" -> %1").arg(Options[pos].NameEng);
+                else return QString(" -> %1").arg(Options[pos].NameRus);
+            } else {
+                if(bEnglish) return QString("    %1").arg(Options[pos].NameEng);
+                else return QString("    %1").arg(Options[pos].NameRus);
+            }
+        }
+        return "";
+    }
+    MenuActions getPositionAction(int pos)  {
+        if(Options.size() > 0)  {
+            return Options[pos].Action;
+        }
+        return MenuActions::None;
+    }
+    MenuActions getnAction()  {
+        if(Options.size() > 0)  {
+            return Options[Position].Action;
+        }
+        return MenuActions::None;
+    }
+    void goUp() { if(Position > 0) Position--; }
+    void goDown() { if(Position + 1 < Options.size()) Position++; }
+
+    QVector<QString> getMenu() {
+        QVector<QString> menu;
+        if(Options.size() == 0) {
+            menu.push_back(QString("Empty menu"));
+            return menu;
+        }
+        if(Options.size() <= 5) {
+            for(int i = 0; i < Options.size();i++)  {
+                menu.push_back(getPositionName(i));
+            }
+            return menu;
+        }
+        if(Position >= Options.size() - 3) {
+            for(int i = Position + 3; i < Position - 5; i--)  {
+                menu.push_front(getPositionName(i));
+            }
+            return menu;
+        }
+        return menu;
     }
 };
 

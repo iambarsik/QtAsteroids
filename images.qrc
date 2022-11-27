@@ -7,5 +7,19 @@
         <file>images/font_micro.png</file>
         <file>images/font_small.png</file>
         <file>images/logo.png</file>
+        <file>images/buttons/down.png</file>
+        <file>images/buttons/down_p.png</file>
+        <file>images/buttons/left.png</file>
+        <file>images/buttons/left_p.png</file>
+        <file>images/buttons/ok.png</file>
+        <file>images/buttons/ok_p.png</file>
+        <file>images/buttons/options.png</file>
+        <file>images/buttons/options_p.png</file>
+        <file>images/buttons/right.png</file>
+        <file>images/buttons/right_p.png</file>
+        <file>images/buttons/shoot.png</file>
+        <file>images/buttons/shoot_p.png</file>
+        <file>images/buttons/up.png</file>
+        <file>images/buttons/up_p.png</file>
     </qresource>
 </RCC>
